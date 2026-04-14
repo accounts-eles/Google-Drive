@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Circle - Click and Reveal</title>
+    <!-- Tailwind CSS for utility classes and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Import Inter font for a clean, modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Brand Colors: 
+           #1f2a52 (Midnight Blue)
+           #00bec7 (Teal)
+           #d2f0f0 (Light Aqua)
+           #abb5bf (Slate Grey)
+        */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Main container for the entire activity */
+        .learning-activity-card {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 35px rgba(31, 42, 82, 0.1);
+            overflow: hidden;
+            border: 1px solid #d2f0f0;
+            margin: 20px;
+        }
+
+        .header-bar {
+            background-color: #1f2a52; /* Midnight Blue */
+            padding: 1.25rem 2rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .learning-activity-container {
+            position: relative;
+            width: 100%;
+            height: 700px; /* Increased height to give space for Lorem Seven */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #d2f0f0; /* Light Aqua background */
+        }
+
+        /* Styling for the large central circle */
+        .large-circle {
+            width: 360px; 
+            height: 360px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(31, 42, 82, 0.1);
+            transition: all 0.5s ease-in-out;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1f2a52;
+            line-height: 1.5;
+            box-sizing: border-box;
+            z-index: 5; 
+            border: 2px solid #abb5bf;
+        }
+
+        .large-circle-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .large-circle-content h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: #00bec7; /* Teal Title */
+        }
+
+        .large-circle-content p {
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        /* Wrapper for small circles */
+        #small-circles-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Styling for individual small circles */
+        .small-circle {
+            position: absolute;
+            width: 70px; 
+            height: 70px;
+            background-color: #1f2a52; /* Midnight Blue */
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        width 0.3s ease-in-out, height 0.3s ease-in-out,
+                        border 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 8px;
+            box-sizing: border-box;
+            line-height: 1.1;
+        }
+
+        .small-circle:hover {
+            background-color: #00bec7;
+            box-shadow: 0 8px 16px rgba(0, 190, 199, 0.3);
+        }
+
+        .small-circle.active {
+            width: 90px; 
+            height: 90px; 
+            border: 3px solid #ffffff;
+            color: #FFFFFF;
+            background-color: #00bec7; /* Teal */
+            z-index: 20; 
+            box-shadow: 0 10px 25px rgba(0, 190, 199, 0.4); 
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .learning-activity-container {
+                height: 550px;
+            }
+
+            .large-circle {
+                width: 280px;
+                height: 280px;
+                padding: 25px;
+            }
+
+            .small-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 0.6rem;
+            }
+
+            .small-circle.active {
+                width: 75px;
+                height: 75px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="learning-activity-card">
+        <!-- Header -->
+        <div class="header-bar">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Small circle - Click and reveal</h1>
+        </div>
+
+        <div class="learning-activity-container">
+            <!-- Large central circle -->
+            <div id="large-circle" class="large-circle">
+                <div class="large-circle-content">
+                    <h2 id="large-circle-title">Lorem Ipsum</h2>
+                    <p id="large-circle-text">Select a small circle to learn more about each topic or heading.</p>
+                </div>
+            </div>
+            <!-- Wrapper for small circles -->
+            <div id="small-circles-wrapper"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data for 7 sections
+        const sectionsData = [
+            { id: 'item1', title: 'Lorem One', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+            { id: 'item2', title: 'Lorem Two', content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+            { id: 'item3', title: 'Lorem Three', content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
+            { id: 'item4', title: 'Lorem Four', content: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+            { id: 'item5', title: 'Lorem Five', content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.' },
+            { id: 'item6', title: 'Lorem Six', content: 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.' },
+            { id: 'item7', title: 'Lorem Seven', content: 'Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi.' }
+        ];
+
+        const largeCircleText = document.getElementById('large-circle-text');
+        const largeCircleTitle = document.getElementById('large-circle-title');
+        const smallCirclesWrapper = document.getElementById('small-circles-wrapper');
+        const container = document.querySelector('.learning-activity-container');
+
+        let activeCircleId = null; 
+        let lastClickedIndex = -1;
+        
+        const BASE_WIDTH = 650;
+        const LARGE_DIAMETER = 360; 
+        const SMALL_DIAMETER = 70;  
+        const ACTIVE_DIAMETER = 90; 
+        // Small orbit gap to keep everything clustered tightly
+        const ORBIT_GAP = -15; 
+
+        function getDynamicSizes() {
+            const containerWidth = container.offsetWidth;
+            const ratio = containerWidth / BASE_WIDTH;
+
+            return {
+                largeDiameter: LARGE_DIAMETER * ratio,
+                smallDiameter: SMALL_DIAMETER * ratio,
+                activeDiameter: ACTIVE_DIAMETER * ratio,
+                orbitGap: ORBIT_GAP * ratio
+            };
+        }
+
+        function degToRad(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function renderCircles() {
+            const sizes = getDynamicSizes();
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            const orbitRadius = (sizes.largeDiameter / 2) + (sizes.smallDiameter / 2) + sizes.orbitGap;
+
+            // Arcing angles - tight vertical spread
+            const rightArcStartAngle = 70; 
+            const leftArcStartAngle = 110; 
+            const angleStep = 24; 
+
+            sectionsData.forEach((section, index) => {
+                const circle = document.getElementById(`circle-${section.id}`);
+                if (!circle) return;
+
+                const isActive = section.id === activeCircleId;
+                let diameter = isActive ? sizes.activeDiameter : sizes.smallDiameter;
+                let targetAngle;
+
+                // Positioning logic
+                if (index <= lastClickedIndex) {
+                    targetAngle = leftArcStartAngle + (index * angleStep);
+                } else {
+                    const rightIdx = index - (lastClickedIndex + 1);
+                    targetAngle = rightArcStartAngle - (rightIdx * angleStep);
+                }
+
+                const radians = degToRad(targetAngle);
+                const x = centerX + orbitRadius * Math.cos(radians) - (diameter / 2);
+                const y = centerY - orbitRadius * Math.sin(radians) - (diameter / 2);
+
+                circle.style.transform = `translate(${x}px, ${y}px)`;
+                circle.style.width = `${diameter}px`;
+                circle.style.height = `${diameter}px`;
+                
+                if (isActive) {
+                    circle.classList.add('active');
+                } else {
+                    circle.classList.remove('active');
+                }
+            });
+        }
+
+        function handleCircleClick(event) {
+            const id = event.currentTarget.dataset.id;
+            if (activeCircleId === id) return;
+
+            activeCircleId = id;
+            lastClickedIndex = sectionsData.findIndex(s => s.id === id);
+
+            const data = sectionsData.find(s => s.id === id);
+            largeCircleTitle.textContent = data.title;
+            largeCircleText.textContent = data.content;
+
+            renderCircles();
+        }
+
+        function init() {
+            sectionsData.forEach(section => {
+                const div = document.createElement('div');
+                div.className = 'small-circle';
+                div.id = `circle-${section.id}`;
+                div.dataset.id = section.id; 
+                div.textContent = section.title; 
+                div.addEventListener('click', handleCircleClick);
+                smallCirclesWrapper.appendChild(div);
+            });
+
+            renderCircles();
+            window.addEventListener('resize', renderCircles);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

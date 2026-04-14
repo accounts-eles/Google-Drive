@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branded FAQ Accordion Template</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use the Inter font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f3f5; /* A neutral background for the page */
+        }
+
+        /* Custom CSS for Accordion Transition (Cannot be done purely with Tailwind max-h-0) */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding: 0 1rem; /* Initial padding to handle transition start/end */
+        }
+        
+        /* Show state uses a large max-height and applies the padding */
+        .accordion-content.show {
+            max-height: 500px; 
+            padding: 1rem;
+        }
+
+        /* Plus/Minus Icon Styling for the Header */
+        .accordion-header::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: white;
+            font-weight: 300;
+        }
+
+        .accordion-header.active::after {
+            content: '-';
+            transform: rotate(0deg);
+        }
+        
+        /* Apply custom colors for brand styling */
+        .text-brand-dark { color: #1f2a52; }
+        .bg-brand-dark { background-color: #1f2a52; } /* Added dark background utility */
+        .bg-brand-cyan { background-color: #00bec7; }
+        .bg-brand-light { background-color: #d2f0f0; }
+        .border-brand-gray { border-color: #abb5bf; }
+        .border-brand-cyan { border-color: #00bec7; } 
+    </style>
+</head>
+<body class="p-4">
+
+    <!-- FAQ Section Container - Outer border removed -->
+    <div class="max-w-3xl mx-auto my-10 p-6 bg-white rounded-xl shadow-2xl">
+        <!-- Main Heading - Dark Navy -->
+        <h2 class="text-3xl font-extrabold text-center mb-8 text-brand-dark uppercase">
+            Frequently Asked Questions
+        </h2>
+
+        <!-- Accordion 1 (Standard Entry) - Border is cyan -->
+        <div class="accordion mb-3 border border-brand-cyan rounded-lg overflow-hidden">
+            <!-- Header is Dark Navy, text is White -->
+            <button class="accordion-header w-full px-5 py-4 text-left border-none cursor-pointer outline-none text-lg font-semibold flex justify-between items-center bg-brand-dark text-white hover:bg-[#152041] transition duration-300">
+                <strong class="text-base sm:text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit?</strong>
+            </button>
+            <div class="accordion-content bg-brand-light text-brand-dark">
+                <p class="leading-relaxed text-sm sm:text-base">
+                    Proin eget tortor risus. Curabitur aliquet quam id dui posuere blandit. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Nulla porttitor accumsan tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+                </p>
+            </div>
+        </div>
+
+        <!-- Accordion 2 (Standard Entry) - Border is cyan -->
+        <div class="accordion mb-3 border border-brand-cyan rounded-lg overflow-hidden">
+            <!-- Header is Dark Navy, text is White -->
+            <button class="accordion-header w-full px-5 py-4 text-left border-none cursor-pointer outline-none text-lg font-semibold flex justify-between items-center bg-brand-dark text-white hover:bg-[#152041] transition duration-300">
+                <strong class="text-base sm:text-lg">Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui?</strong>
+            </button>
+            <div class="accordion-content bg-brand-light text-brand-dark">
+                <p class="leading-relaxed text-sm sm:text-base">
+                    Donec sollicitudin molestie malesuada. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor eget felis porttitor volutpat. Proin eget tortor risus. Sed porttitor lectus nibh. Quisque velit nisi, pretium ut lacinia in, elementum id enim.
+                </p>
+            </div>
+        </div>
+
+        <!-- Accordion 3 (Placeholder ICON Example) - Border is cyan -->
+        <div class="accordion mb-3 border border-brand-cyan rounded-lg overflow-hidden">
+            <!-- Header is Dark Navy, text is White -->
+            <button class="accordion-header w-full px-5 py-4 text-left border-none cursor-pointer outline-none text-lg font-semibold flex justify-between items-center bg-brand-dark text-white hover:bg-[#152041] transition duration-300">
+                <strong class="text-base sm:text-lg">How do I replace the placeholder icon?</strong>
+            </button>
+            <div class="accordion-content bg-brand-light text-brand-dark">
+                <p class="leading-relaxed text-sm sm:text-base mb-4">
+                    Pellentesque in ipsum id orci porta dapibus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
+                </p>
+                <!-- PLACEHOLDER ICON -->
+                <div class="flex flex-col items-center justify-center py-4 bg-white/70 rounded-md">
+                    <span class="text-6xl text-brand-dark transition-transform hover:scale-110 duration-200" aria-label="Placeholder Icon">⭐</span>
+                    <p class="mt-2 text-sm italic font-medium text-brand-dark">
+                        PLACEHOLDER ICON: Replace this star emoji with a suitable icon (e.g., Lucide icon, SVG, or FontAwesome).
+                    </p>
+                </div>
+                <!-- /PLACEHOLDER ICON -->
+            </div>
+        </div>
+        
+        <!-- Accordion 4 (Placeholder IMAGE Example) - Border is cyan -->
+        <div class="accordion mb-3 border border-brand-cyan rounded-lg overflow-hidden">
+            <!-- Header is Dark Navy, text is White -->
+            <button class="accordion-header w-full px-5 py-4 text-left border-none cursor-pointer outline-none text-lg font-semibold flex justify-between items-center bg-brand-dark text-white hover:bg-[#152041] transition duration-300">
+                <strong class="text-base sm:text-lg">Where should I put a supporting image?</strong>
+            </button>
+            <div class="accordion-content bg-brand-light text-brand-dark">
+                <p class="leading-relaxed text-sm sm:text-base mb-4">
+                    Donec rutrum congue leo eget malesuada. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Cras ultricies ligula sed magna dictum porta.
+                </p>
+                <!-- PLACEHOLDER IMAGE -->
+                <div class="w-full h-40 bg-gray-200 border-2 border-dashed border-brand-gray flex items-center justify-center rounded-lg my-4">
+                    <span class="text-brand-dark text-lg sm:text-xl font-bold p-4 text-center">PLACEHOLDER IMAGE (500x160)</span>
+                </div>
+                <p class="text-sm italic font-medium text-center text-brand-dark">
+                    PLACEHOLDER IMAGE: Replace this dashed box with your image asset.
+                </p>
+                <!-- /PLACEHOLDER IMAGE -->
+            </div>
+        </div>
+
+        <!-- Accordion 5 (Standard Entry) - Border is cyan -->
+        <div class="accordion border border-brand-cyan rounded-lg overflow-hidden">
+            <!-- Header is Dark Navy, text is White -->
+            <button class="accordion-header w-full px-5 py-4 text-left border-none cursor-pointer outline-none text-lg font-semibold flex justify-between items-center bg-brand-dark text-white hover:bg-[#152041] transition duration-300">
+                <strong class="text-base sm:text-lg">Nulla quis sem at nibh elementum imperdiet?</strong>
+            </button>
+            <div class="accordion-content bg-brand-light text-brand-dark">
+                <p class="leading-relaxed text-sm sm:text-base">
+                    Donec rutrum congue leo eget malesuada. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus suscipit tortor eget felis porttitor volutpat. Nulla quis sem at nibh elementum imperdiet.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Accordion Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Get the content panel associated with this header
+                    const content = this.nextElementSibling;
+                    
+                    // Toggle 'active' class on the clicked header
+                    const isActive = this.classList.contains('active');
+
+                    // Close all other open accordions
+                    document.querySelectorAll('.accordion-header.active').forEach(openHeader => {
+                        if (openHeader !== this) {
+                            openHeader.classList.remove('active');
+                            openHeader.nextElementSibling.classList.remove('show');
+                        }
+                    });
+
+                    // Toggle the clicked accordion
+                    if (isActive) {
+                        this.classList.remove('active');
+                        content.classList.remove('show');
+                    } else {
+                        this.classList.add('active');
+                        content.classList.add('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infection Control Activity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*
+        New Brand Colors:
+        Primary/Accent: #e72582 (Pink)
+        Secondary/Neutral: #abb5bf (Light Gray/Blue)
+        Dark/Text: #1f2a52 (Dark Blue)
+        Highlight: #00bec7 (Cyan)
+        Light Background: #d2f0f0 (Very Light Cyan)
+        Panel Background: #2e4d6b (Medium Dark Blue)
+        Panel Highlight/Border: #aed9d9 (Light Aqua)
+        Dark Accent: #4b6b74 (Muted Blue-Gray)
+        White: #ffffff
+        */
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #d2f0f0; /* Light Background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+        }
+        .icon-panel {
+            flex-shrink: 0;
+            width: 100%;
+            background-color: #2e4d6b; /* Panel Background */
+            padding: 20px;
+            border-bottom: 2px solid #aed9d9; /* Panel Highlight/Border */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+        @media (min-width: 768px) {
+            .icon-panel {
+                width: 350px;
+                grid-template-columns: repeat(3, 1fr);
+                border-bottom: none;
+                border-right: 2px solid #aed9d9; /* Panel Highlight/Border */
+                padding: 30px;
+                align-content: start;
+            }
+        }
+        @media (min-width: 1024px) {
+            .icon-panel {
+                width: 350px;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centered content again */
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s, border-color 0.2s;
+            width: 90px;
+            height: 90px; /* Reverted height */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+        .icon-button:hover {
+            transform: translateY(-3px);
+            /* Primary/Accent (#e72582) shadow */
+            box-shadow: 0 6px 12px rgba(231, 37, 130, 0.4);
+            background-color: #f9f9f9;
+        }
+        .icon-button.active {
+            background-color: #00bec7; /* Highlight */
+            border-color: #1f2a52; /* Dark/Text */
+            /* Dark/Text (#1f2a52) shadow */
+            box-shadow: 0 4px 10px rgba(31, 42, 82, 0.3);
+        }
+        .icon-button img {
+            width: 60px; /* Reverted size */
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        /* Content Display Styling - Removed fade transition */
+        .content-display {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 300px;
+        }
+        .content-display h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2a52; /* Dark/Text */
+            margin-bottom: 15px;
+        }
+        .content-display p {
+            font-size: 1.125rem;
+            color: #4b6b74; /* Dark Accent */
+            line-height: 1.6;
+            max-width: 700px;
+        }
+        .initial-message {
+            color: #abb5bf; /* Secondary/Neutral */
+            font-style: italic;
+        }
+        
+        /* Removed .status-bar styles */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Icon Panel - Removed labels -->
+        <div class="icon-panel">
+            <button class="icon-button" data-content="handHygiene">
+                <img src="https://placehold.co/60x60/abb5bf/ffffff?text=Icon+1" alt="Icon 1">
+            </button>
+            <button class="icon-button" data-content="useOfPPE">
+                <img src="https://placehold.co/60x60/abb5bf/ffffff?text=Icon+2" alt="Icon 2">
+            </button>
+            <button class="icon-button" data-content="safeSharps">
+                <img src="https://placehold.co/60x60/abb5bf/ffffff?text=Icon+3" alt="Icon 3">
+            </button>
+            <button class="icon-button" data-content="environmentalCleaning">
+                <img src="https://placehold.co/60x60/abb5bf/ffffff?text=Icon+4" alt="Icon 4">
+            </button>
+            <button class="icon-button" data-content="wasteManagement">
+                <img src="https://placehold.co/60x60/abb5bf/ffffff?text=Icon+5" alt="Icon 5">
+            </button>
+        </div>
+
+        <!-- Content Display -->
+        <div class="content-display" id="contentDisplay">
+            <h2 class="initial-message">Click an Icon for Details!</h2>
+            <p class="initial-message">Select any of the icons on the left to display placeholder information based on the new design.</p>
+        </div>
+    </div>
+    
+    <!-- Removed Status Bar -->
+
+    <script>
+        // Content replaced with Lorem Ipsum
+        const contentData = {
+            handHygiene: {
+                title: "Lorem Ipsum Dolor Sit Amet",
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae."
+            },
+            useOfPPE: {
+                title: "Consectetur Adipiscing Elit",
+                text: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Praesent ac nibh vitae erat pretium iaculis."
+            },
+            safeSharps: {
+                title: "Voluptate Velit Esse Cillum",
+                text: "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. Curabitur vel metus quis mi iaculis luctus."
+            },
+            environmentalCleaning: {
+                title: "Natus Error Sit Voluptatem",
+                text: "Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores. Aenean eget urna in purus pellentesque scelerisque."
+            },
+            wasteManagement: {
+                title: "Sed Ut Perspiciatis Unde",
+                text: "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus. Integer feugiat nulla eget neque aliquet, id feugiat metus accumsan."
+            }
+        };
+
+        const iconButtons = document.querySelectorAll('.icon-button');
+        const contentDisplay = document.getElementById('contentDisplay');
+        
+        // Removed progress tracking logic
+
+        iconButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const contentType = button.dataset.content;
+                const data = contentData[contentType];
+
+                if (!data) return; 
+
+                // 1. Remove active class from all buttons and add to current
+                iconButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Removed progress tracking update
+
+                // 2. Update content (no fade transition logic needed)
+                contentDisplay.innerHTML = `
+                    <h2>${data.title}</h2>
+                    <p>${data.text}</p>
+                `;
+            });
+        });
+        
+        // Removed initial progress display call
+    </script>
+</body>
+</html>

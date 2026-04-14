@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Accordion Activity - Lorem Ipsum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* Brand Colors: 
+           #1f2a52 (Midnight Blue)
+           #00bec7 (Teal)
+           #d2f0f0 (Light Aqua)
+           #abb5bf (Slate Grey)
+        */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1f2a52;
+            padding: 2rem 1rem;
+        }
+
+        .activity-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(31, 42, 82, 0.1);
+            overflow: hidden;
+            border: 1px solid #d2f0f0;
+        }
+
+        .header-bar {
+            background-color: #1f2a52;
+            padding: 1.5rem 2rem;
+            color: #ffffff;
+        }
+
+        .content-area {
+            padding: 2rem;
+        }
+
+        .accordion-item {
+            margin-bottom: 1rem;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid #d2f0f0;
+        }
+
+        .accordion-header {
+            background-color: #d2f0f0;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background-color: #c4e8e8;
+        }
+
+        .accordion-header.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d2f0f0;
+        }
+
+        .accordion-title {
+            font-weight: 700;
+            color: #1f2a52;
+            font-size: 1.1rem;
+        }
+
+        .accordion-icon {
+            color: #00bec7;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #ffffff;
+        }
+
+        .accordion-inner {
+            padding: 1.5rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .lorem-heading {
+            color: #00bec7;
+            font-weight: 700;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .lorem-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .lorem-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lorem-list li::before {
+            content: "•";
+            color: #00bec7;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="activity-card">
+        <!-- Header -->
+        <div class="header-bar">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Accordion with down arrows</h1>
+            <p class="text-sm opacity-80 italic">Click the sections below to explore the details.</p>
+        </div>
+
+        <div class="content-area">
+            
+            <!-- Accordion 1 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Lorem ipsum dolor sit amet</span>
+                    <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                        <span class="lorem-heading">Consectetur adipiscing:</span>
+                        <ul class="lorem-list">
+                            <li>Excepteur sint occaecat cupidatat non proident.</li>
+                            <li>Sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+                            <li>Sed ut perspiciatis unde omnis iste natus error.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 2 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Sed do eiusmod tempor incididunt</span>
+                    <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                        <span class="lorem-heading">Magni dolores:</span>
+                        <ul class="lorem-list">
+                            <li>Neque porro quisquam est, qui dolorem ipsum quia dolor.</li>
+                            <li>Amet, consectetur, adipisci velit, sed quia non numquam.</li>
+                            <li>Eius modi tempora incidunt ut labore et dolore magnam.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 3 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Quis autem vel eum iure reprehenderit</span>
+                    <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.</p>
+                        <span class="lorem-heading">Similique sunt:</span>
+                        <ul class="lorem-list">
+                            <li>Et harum quidem rerum facilis est et expedita distinctio.</li>
+                            <li>Nam libero tempore, cum soluta nobis est eligendi optio.</li>
+                            <li>Cumque nihil impedit quo minus id quod maxime placeat.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const allItems = document.querySelectorAll('.accordion-content');
+            const allHeaders = document.querySelectorAll('.accordion-header');
+
+            // Toggle logic
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                header.classList.remove('active');
+            } else {
+                // Close others
+                allItems.forEach(item => item.style.maxHeight = '0px');
+                allHeaders.forEach(h => h.classList.remove('active'));
+
+                // Open this one
+                content.style.maxHeight = content.scrollHeight + "px";
+                header.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Framework - Lorem Ipsum Scenarios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Tab Styles */
+        .tab-button {
+            /* Updated for brand colors */
+            background-color: #d2f0f0; /* Light Teal */
+            border: 1px solid #1f2a52; /* Dark Blue Border */
+            border-bottom: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: #1f2a52; /* Dark Blue Text */
+            margin-bottom: -1px;
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-button:not(.active):hover {
+            background-color: #b8e0e0; /* Slightly darker Light Teal on hover */
+            color: #111827;
+        }
+        .tab-button.active {
+            background-color: #00bec7; /* Teal Primary Accent */
+            color: #ffffff;
+            border-color: #00bec7;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Brand Colors */
+        .brand-red-text { color: #00bec7; } /* Teal Highlight */
+        .brand-red-header { color: #1f2a52; } /* Dark Blue Header */
+        
+        .context-box {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0 0.75rem 0.75rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            margin-bottom: 2rem;
+        }
+        .prompt {
+            /* Teal border */
+            background-color: #f9fafb;
+            border-left: 3px solid #00bec7; 
+            padding: 0.75rem 1rem;
+            font-style: italic;
+            color: #374151;
+            margin-top: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        /* Phase Button Styles */
+        .phase-button {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .phase-button:hover:not(.active-button) {
+            /* Teal hover effect */
+            background-color: #d2f0f0; /* Light Teal Background */
+            border-color: #00bec7; /* Teal Border */
+            color: #00bec7; /* Teal Text */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .phase-button.active-button {
+            /* Active button color is Teal */
+            background-color: #00bec7;
+            border-color: #1f2a52; /* Dark Blue Border */
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        /* Modal Styles remain the same */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation-name: fadeIn;
+            animation-duration: 0.4s;
+        }
+        .modal-content {
+            position: relative;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 90%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            animation-name: slideIn;
+            animation-duration: 0.4s;
+        }
+        .modal-content-large {
+            max-width: 900px;
+        }
+        .modal-content::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -15px;
+            width: 0; height: 0;
+            border-top: solid 15px #fff;
+            border-left: solid 15px transparent;
+            border-right: solid 15px transparent;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px; right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover, .close-button:focus { color: #000; }
+        
+        .mapping-button-container {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-bottom: 1rem;
+        }
+        .mapping-button {
+            /* Teal Button */
+            background-color: #00bec7; 
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.2s ease-in-out;
+            display: inline-block;
+        }
+        .mapping-button:hover {
+            /* Darker Teal on hover */
+            background-color: #00a4ac; 
+            transform: scale(1.05);
+        }
+        
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .mapping-table th, .mapping-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+        .mapping-table th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn { from {top: -300px; opacity: 0} to {top: 50%; opacity: 1} }
+        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
+    </style>
+</head>
+<body class="bg-gray-100 text-black">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Lorem Ipsum Framework Application</h1>
+            <p class="mt-2 text-lg text-gray-700">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div id="tab-container" class="mb-0">
+            <nav class="flex flex-col sm:flex-row gap-1" aria-label="Tabs">
+                <button class="tab-button active" data-tab="scenario1">Scenario 1: Ipsum Dolor</button>
+                <button class="tab-button" data-tab="scenario2">Scenario 2: Sit Amet</button>
+                <button class="tab-button" data-tab="scenario3">Scenario 3: Adipiscing Elit</button>
+            </nav>
+        </div>
+
+        <!-- Tab Content Panels -->
+        <div id="tab-content-container">
+            <!-- Scenarios 1 -->
+            <div id="scenario1" class="tab-content active">
+                <div class="context-box">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Scenario 1: Placeholder Content Structure</h2>
+                    <p class="text-gray-700 mb-4"><strong class="font-semibold">Challenge:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">Formal Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident:</p>
+                        <p class="prompt">"Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Summarise the top 5."</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="font-semibold text-lg text-gray-800">Experiential Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam:</p>
+                        <p class="prompt">"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque. Provide me with some appropriate questions."</p>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <h3 class="font-semibold text-lg text-gray-800">Discussion Question (Placeholder)</h3>
+                        <p class="text-gray-700 mt-2"><strong class="font-semibold">Discussion Question:</strong> Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt? Neque porro quisquam est?</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center items-center gap-3 md:gap-4 mt-8">
+                    <button class="phase-button" data-title="Framework Intent" data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." data-reasoning="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">Framework Intent</button>
+                    <button class="phase-button" data-title="Design/Develop" data-content="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore." data-reasoning="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">Design/Develop</button>
+                    <button class="phase-button" data-title="Apply" data-content="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium." data-reasoning="Rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.">Apply</button>
+                    <button class="phase-button" data-title="Monitor" data-content="Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit." data-reasoning="Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.">Monitor</button>
+                    <button class="phase-button" data-title="Oversight & Report" data-content="Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae." data-reasoning="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.">Oversight & Report</button>
+                </div>
+                <div class="mapping-button-container">
+                    <button class="mapping-button">Compliance Mapping</button>
+                </div>
+            </div>
+            <!-- Scenarios 2 -->
+            <div id="scenario2" class="tab-content">
+                <div class="context-box">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Scenario 2: Placeholder Content Structure</h2>
+                    <p class="text-gray-700 mb-4"><strong class="font-semibold">Challenge:</strong> Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin fermentum, velit vitae scelerisque mattis, dui sapien dignissim sapien, vel sodales mauris diam sit amet eros. Donec interdum, purus et iaculis efficitur.</p>
+
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">Experiential Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Curabitur pretium, dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat:</p>
+                        <p class="prompt">"Act as a skeptical client who is unsure about the new offering. I will explain the product to you. Your goal is to ask me three difficult questions focusing on hidden costs and long-term implications."</p>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="font-semibold text-lg text-gray-800">Social Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut aliquip:</p>
+                        <p class="prompt">"I just successfully outlined the product by comparing its short-term cost to the long-term value. Turn this concept into a clear, 3-point summary that I can share on our internal comms platform."</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                           <h3 class="font-semibold text-lg text-gray-800">Discussion Question (Placeholder)</h3>
+                           <p class="text-gray-700 mt-2"><strong class="font-semibold">Discussion Question:</strong> Maecenas porttitor augue vel erat hendrerit, in posuere nisl pretium. Sed dictum sem eget tellus faucibus, eu consectetur neque dictum? What role should team leaders play in validating this peer-to-peer content?</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center items-center gap-3 md:gap-4 mt-8">
+                    <button class="phase-button" data-title="Framework Intent" data-content="Fusce vel dui at nunc egestas eleifend. Aliquam erat volutpat. Ut enim ad minim veniam." data-reasoning="Proin fermentum, velit vitae scelerisque mattis, dui sapien dignissim sapien, vel sodales mauris diam sit amet eros.">Framework Intent</button>
+                    <button class="phase-button" data-title="Design/Develop" data-content="Curabitur pretium, dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat." data-reasoning="Donec interdum, purus et iaculis efficitur, odio est consequat, et tincidunt odio mauris a massa.">Design/Develop</button>
+                    <button class="phase-button" data-title="Apply" data-content="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean aliquet ligula non." data-reasoning="Phasellus sed nunc eget tellus faucibus, eu consectetur neque dictum. Etiam non magna at eros.">Apply</button>
+                    <button class="phase-button" data-title="Monitor" data-content="Vivamus sit amet justo aliquet, venenatis nulla sed, egestas ligula. Sed dictum sem eget tellus." data-reasoning="Integer auctor, velit eget ultricies facilisis, nunc magna egestas urna, vitae porttitor magna nulla a odio.">Monitor</button>
+                    <button class="phase-button" data-title="Oversight & Report" data-content="Nunc magna egestas urna, vitae porttitor magna nulla a odio. Nulla facilisi." data-reasoning="Aliquam erat volutpat. Fusce vel dui at nunc egestas eleifend. Curabitur pretium.">Oversight & Report</button>
+                </div>
+                <div class="mapping-button-container">
+                    <button class="mapping-button">Compliance Mapping</button>
+                </div>
+            </div>
+            <!-- Scenarios 3 -->
+            <div id="scenario3" class="tab-content">
+                <div class="context-box">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Scenario 3: Placeholder Content Structure</h2>
+                    <p class="text-gray-700 mb-4"><strong class="font-semibold">Challenge:</strong> Integer auctor, velit eget ultricies facilisis, nunc magna egestas urna, vitae porttitor magna nulla a odio. Nulla facilisi. Aliquam erat volutpat. Ut enim ad minim veniam.</p>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">Formal Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Vivamus sit amet justo aliquet, venenatis nulla sed, egestas ligula. Sed dictum sem eget tellus faucibus. Phasellus sed nunc eget tellus:</p>
+                        <p class="prompt">"Explain the core components of the MBO (Management by Objectives) model for performance management. Give me a relevant example."</p>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="font-semibold text-lg text-gray-800">Experiential & Social Learning (Placeholder)</h3>
+                        <p class="text-gray-600 italic my-2">Nunc magna egestas urna, vitae porttitor magna nulla a odio. Integer auctor, velit eget ultricies facilisis. Curabitur pretium, dolor sit amet, consectetur adipiscing elit:</p>
+                        <p class="prompt">"I need to prepare for a performance review conversation about a lack of accountability. Help me structure the mid-point of the conversation to offer a clear path forward. Provide three different action-oriented phrases I could use."</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                           <h3 class="font-semibold text-lg text-gray-800">Discussion Question (Placeholder)</h3>
+                           <p class="text-gray-700 mt-2"><strong class="font-semibold">Discussion Question:</strong> Aliquam erat volutpat. Fusce vel dui at nunc egestas eleifend. Maecenas porttitor augue vel erat hendrerit, in posuere nisl pretium. How can we balance providing a safe practice space with ensuring leaders follow correct escalation procedures?</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center items-center gap-3 md:gap-4 mt-8">
+                       <button class="phase-button" data-title="Framework Intent" data-content="Maecenas porttitor augue vel erat hendrerit, in posuere nisl pretium. Integer auctor, velit eget ultricies facilisis." data-reasoning="Vivamus sit amet justo aliquet, venenatis nulla sed, egestas ligula. Sed dictum sem eget tellus faucibus.">Framework Intent</button>
+                    <button class="phase-button" data-title="Design/Develop" data-content="Phasellus sed nunc eget tellus faucibus, eu consectetur neque dictum. Etiam non magna at eros." data-reasoning="Nunc magna egestas urna, vitae porttitor magna nulla a odio. Nulla facilisi.">Design/Develop</button>
+                    <button class="phase-button" data-title="Apply" data-content="Aliquam erat volutpat. Fusce vel dui at nunc egestas eleifend. Curabitur pretium." data-reasoning="Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.">Apply</button>
+                    <button class="phase-button" data-title="Monitor" data-content="Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor." data-reasoning="In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.">Monitor</button>
+                    <button class="phase-button" data-title="Oversight & Report" data-content="Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." data-reasoning="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.">Oversight & Report</button>
+                </div>
+                <div class="mapping-button-container">
+                    <button class="mapping-button">Compliance Mapping</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals and Buttons -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modal-title" class="text-2xl font-semibold brand-red-text mb-4"></h3>
+            <div>
+                <h4 class="font-semibold text-gray-900">Key Action / Question</h4>
+                <p id="modal-content" class="text-gray-700 mt-1"></p>
+            </div>
+            <div class="reasoning-section">
+                <h4 class="font-semibold text-gray-900">Reasoning</h4>
+                <p id="modal-reasoning" class="text-gray-700 mt-1"></p>
+            </div>
+        </div>
+    </div>
+    <div id="mapping-modal" class="modal">
+        <div class="modal-content modal-content-large">
+            <span class="close-button">&times;</span>
+            <h3 id="mapping-modal-title" class="text-2xl font-semibold brand-red-text mb-4"></h3>
+            <div id="mapping-modal-content" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <!-- Mapping Data (Hidden Content) -->
+    <div id="mapping-data-scenario1" class="hidden">
+        <table class="mapping-table">
+            <thead>
+                <tr><th>Phase</th><th>Framework Intent</th><th>Design/Develop</th><th>Apply</th><th>Monitor</th><th>Oversight & Report</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>OBJECTIVE</strong></td>
+                    <td>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</td>
+                    <td>Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</td>
+                    <td>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
+                    <td>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo.</td>
+                    <td>Inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit.</td>
+                </tr>
+                <tr>
+                    <td><strong>ALIGNMENT</strong></td>
+                    <td>Neque porro quisquam est.</td>
+                    <td>Qui dolorem ipsum quia dolor.</td>
+                    <td>Sit amet, consectetur, adipisci velit.</td>
+                    <td>Velit esse quam nihil molestiae.</td>
+                    <td>Consequatur, vel illum qui dolorem.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="mapping-data-scenario2" class="hidden">
+           <table class="mapping-table">
+            <thead>
+                <tr><th>Phase</th><th>Framework Intent</th><th>Design/Develop</th><th>Apply</th><th>Monitor</th><th>Oversight & Report</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>OBJECTIVE</strong></td>
+                    <td>Curabitur pretium, dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat. Ut enim ad minim veniam, quis nostrud exercitation.</td>
+                    <td>Donec interdum, purus et iaculis efficitur, odio est consequat, et tincidunt odio mauris a massa. Phasellus sed nunc eget tellus faucibus.</td>
+                    <td>Eu consectetur neque dictum. Etiam non magna at eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</td>
+                    <td>Aenean aliquet ligula non. Integer auctor, velit eget ultricies facilisis, nunc magna egestas urna, vitae porttitor magna nulla a odio.</td>
+                    <td>Nulla facilisi. Aliquam erat volutpat. Fusce vel dui at nunc egestas eleifend. Maecenas porttitor augue vel erat hendrerit, in posuere nisl pretium.</td>
+                </tr>
+                <tr>
+                    <td><strong>ALIGNMENT</strong></td>
+                    <td>Temporibus autem quibusdam.</td>
+                    <td>Et aut officiis debitis aut rerum.</td>
+                    <td>Necessitatibus saepe eveniet ut et.</td>
+                    <td>Voluptates repudiandae sint et molestiae.</td>
+                    <td>Non recusandae. Itaque earum rerum.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="mapping-data-scenario3" class="hidden">
+        <table class="mapping-table">
+            <thead>
+                <tr><th>Phase</th><th>Framework Intent</th><th>Design/Develop</th><th>Apply</th><th>Monitor</th><th>Oversight & Report</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>OBJECTIVE</strong></td>
+                    <td>Vivamus sit amet justo aliquet, venenatis nulla sed, egestas ligula. Sed dictum sem eget tellus faucibus, eu consectetur neque dictum.</td>
+                    <td>Nunc magna egestas urna, vitae porttitor magna nulla a odio. Integer auctor, velit eget ultricies facilisis, nunc magna egestas urna.</td>
+                    <td>Vitae porttitor magna nulla a odio. Nulla facilisi. Aliquam erat volutpat. Fusce vel dui at nunc egestas eleifend. Curabitur pretium.</td>
+                    <td>Dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
+                    <td>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</td>
+                </tr>
+                <tr>
+                    <td><strong>ALIGNMENT</strong></td>
+                    <td>Et harum quidem rerum facilis.</td>
+                    <td>Est et expedita distinctio.</td>
+                    <td>Nam libero tempore, cum soluta.</td>
+                    <td>Nobis est eligendi optio.</td>
+                    <td>Cumque nihil impedit quo.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Tab switching logic
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        const infoModal = document.getElementById("info-modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalContent = document.getElementById("modal-content");
+        const modalReasoning = document.getElementById("modal-reasoning");
+        
+        function openInfoModal(title, content, reasoning) {
+            modalTitle.textContent = title;
+            modalContent.textContent = content;
+            modalReasoning.textContent = reasoning;
+            infoModal.style.display = "block";
+        }
+        
+        function closeAndResetInfoModal() {
+            const currentActive = document.querySelector(".phase-button.active-button");
+            if (currentActive) currentActive.classList.remove("active-button");
+            infoModal.style.display = "none";
+        }
+        
+        // Phase button click logic to open the small modal
+        document.querySelectorAll(".phase-button").forEach(button => {
+            button.onclick = function() {
+                this.parentElement.querySelectorAll('.phase-button').forEach(btn => btn.classList.remove('active-button'));
+                this.classList.add("active-button");
+                openInfoModal(this.dataset.title, this.dataset.content, this.dataset.reasoning);
+            }
+        });
+
+        const allModals = document.querySelectorAll('.modal');
+        allModals.forEach(modal => {
+            modal.querySelector('.close-button').onclick = () => {
+                if(modal.id === 'info-modal') closeAndResetInfoModal();
+                else modal.style.display = 'none';
+            };
+        });
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                if(event.target.id === 'info-modal') closeAndResetInfoModal();
+                else event.target.style.display = 'none';
+            }
+        }
+        
+        const mappingModal = document.getElementById("mapping-modal");
+        const mappingModalTitle = document.getElementById("mapping-modal-title");
+        const mappingModalContent = document.getElementById("mapping-modal-content");
+        
+        // Mapping button logic to open the large modal with table data
+        document.querySelectorAll('.mapping-button').forEach(button => {
+            button.onclick = function() {
+                const activeTab = document.querySelector('.tab-button.active');
+                const scenarioId = activeTab.getAttribute('data-tab');
+                const scenarioTitle = activeTab.textContent.trim();
+                const dataContainer = document.getElementById(`mapping-data-${scenarioId}`);
+                
+                if (dataContainer) {
+                    mappingModalTitle.textContent = `${scenarioTitle} - Compliance Mapping`;
+                    mappingModalContent.innerHTML = dataContainer.innerHTML;
+                    mappingModal.style.display = "block";
+                }
+            };
+        });
+    });
+    </script>
+</body>
+</html>

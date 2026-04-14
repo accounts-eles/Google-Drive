@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Studio - Filing Cabinet Interactive</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Open+Sans:ital,wght@0,400;0,600;0,800;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Brand Colors directly from user request */
+            --midnight: #1f2a52;
+            --teal: #00bec7;
+            --aqua: #d2f0f0;
+            --slate: #abb5bf;
+
+            --bg-paper: #fcfcfc;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-paper);
+        }
+
+        .main-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Texture overlay for paper feel */
+            background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* SVG Scene Styling */
+        #office-scene {
+            width: 100%;
+            height: 100%;
+            max-width: 1600px;
+            max-height: 900px;
+        }
+
+        /* SKETCH STYLES */
+        /* We apply filters to give the perspective lines a hand-drawn wobble */
+
+        .sketch-line {
+            fill: none;
+            stroke: var(--midnight);
+            /* Brand Color: Midnight Blue */
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#squiggly-0);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .sketch-line-thick {
+            fill: none;
+            stroke: var(--midnight);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#squiggly-1);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .sketch-fill-aqua {
+            fill: var(--aqua);
+            /* Brand Color: Light Aqua */
+            fill-opacity: 0.5;
+            filter: url(#watercolor);
+        }
+
+        .sketch-fill-slate {
+            fill: var(--slate);
+            /* Brand Color: Slate Grey */
+            fill-opacity: 0.2;
+            filter: url(#watercolor);
+        }
+
+        /* Interactive Elements */
+        .drawer-group {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .drawer-group:hover {
+            transform: translateY(-2px);
+        }
+
+        .drawer-group:hover .drawer-face {
+            fill: var(--aqua);
+            /* Light Aqua highlight */
+            fill-opacity: 0.3;
+        }
+
+        .drawer-group:hover .open-btn-bg {
+            fill: var(--teal);
+            stroke: var(--midnight);
+        }
+
+        .drawer-group:hover .open-btn-text {
+            fill: white;
+        }
+
+        .open-btn-group {
+            pointer-events: none;
+            /* Let the group click handle it */
+        }
+
+        .open-btn-bg {
+            fill: white;
+            stroke: var(--teal);
+            stroke-width: 1.5;
+            transition: all 0.3s;
+            filter: url(#squiggly-0);
+        }
+
+        .open-btn-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 9px;
+            font-weight: 800;
+            fill: var(--teal);
+            text-anchor: middle;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .drawer-handle {
+            fill: #fff;
+            stroke: var(--slate);
+            stroke-width: 2;
+            filter: url(#squiggly-0);
+        }
+
+        /* Pop-out Panel */
+        #reveal-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 450px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-left: 4px solid var(--midnight);
+            padding: 0;
+            box-shadow: -10px 0 40px rgba(31, 42, 82, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #reveal-panel.active {
+            transform: translateX(0);
+        }
+
+        .panel-header {
+            padding: 40px;
+            background: linear-gradient(135deg, white 0%, var(--aqua) 100%);
+            border-bottom: 1px solid var(--teal);
+        }
+
+        .panel-eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--teal);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #reveal-panel h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            margin: 0;
+            color: var(--midnight);
+            line-height: 1.1;
+        }
+
+        #reveal-panel .content-body {
+            padding: 40px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4a5568;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border: 2px solid var(--slate);
+            border-radius: 50%;
+            color: var(--midnight);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <!-- SVG Office Scene - Perspective + Sketch Filter -->
+        <svg id="office-scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <!-- Wobbly Line Filters -->
+                <filter id="squiggly-0">
+                    <feTurbulence baseFrequency="0.015" numOctaves="3" result="noise" seed="0" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+                </filter>
+                <filter id="squiggly-1">
+                    <feTurbulence baseFrequency="0.015" numOctaves="3" result="noise" seed="1" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+                </filter>
+                <!-- Watercolor Fill Filter -->
+                <filter id="watercolor" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+                    <feTurbulence baseFrequency="0.03" numOctaves="3" result="noise" />
+                    <feDisplacementMap in="blur" in2="noise" scale="10" />
+                </filter>
+            </defs>
+
+            <!-- ROOM PERSPECTIVE -->
+
+            <!-- Floor (Slate Wash) -->
+            <path d="M0 900 L 200 650 L 1400 650 L 1600 900 Z" class="sketch-fill-slate" opacity="0.4" />
+            <!-- Wall corners -->
+            <line x1="200" y1="150" x2="200" y2="750" class="sketch-line" opacity="0.3" />
+            <line x1="1400" y1="150" x2="1400" y2="750" class="sketch-line" opacity="0.3" />
+            <!-- Ceiling/Floor lines -->
+            <line x1="0" y1="900" x2="200" y2="650" class="sketch-line" />
+            <line x1="1600" y1="900" x2="1400" y2="650" class="sketch-line" />
+
+            <!-- Window (Back Wall Right) -->
+            <g transform="translate(900, 200)">
+                <!-- Outside Sky (Aqua Wash) -->
+                <rect x="10" y="10" width="380" height="280" class="sketch-fill-aqua" />
+                <!-- Frame -->
+                <rect x="0" y="0" width="400" height="300" class="sketch-line-thick" rx="2" />
+                <line x1="200" y1="0" x2="200" y2="300" class="sketch-line" />
+                <line x1="0" y1="180" x2="400" y2="180" class="sketch-line" />
+                <!-- Curtains/Reflection hint -->
+                <path d="M350 0 Q 380 100 400 200" class="sketch-line" opacity="0.3" stroke-dasharray="5,5" />
+            </g>
+
+            <!-- Plant (Corner Right) -->
+            <g transform="translate(1300, 520)">
+                <path d="M0 150 L 20 150 L 15 250 L 5 250 Z" class="sketch-line" fill="white" />
+                <ellipse cx="10" cy="150" rx="30" ry="10" class="sketch-line" fill="none" />
+                <!-- Leaves (Teal touches) -->
+                <path d="M10 150 Q -30 50 10 20 Q 50 50 10 150" class="sketch-line" fill="var(--aqua)"
+                    fill-opacity="0.5" />
+                <path d="M10 150 Q 60 70 80 100 Q 60 140 10 150" class="sketch-line" fill="white" />
+            </g>
+
+            <!-- Desk (Perspective Right) -->
+            <g transform="translate(700, 450)">
+                <!-- Legs -->
+                <path d="M50 80 L 30 350" class="sketch-line-thick" />
+                <path d="M550 80 L 570 350" class="sketch-line-thick" />
+                <path d="M480 80 L 490 250" class="sketch-line" stroke-width="1" /> <!-- Back leg -->
+
+                <!-- Desktop Surface -->
+                <path d="M0 80 L 600 80 L 520 0 L 80 0 Z" class="sketch-line-thick" fill="white" />
+                <rect x="0" y="80" width="600" height="15" class="sketch-line" fill="#eee" />
+
+                <!-- Computer -->
+                <g transform="translate(250, -40)">
+                    <rect x="0" y="0" width="140" height="90" class="sketch-line-thick" fill="white" />
+                    <rect x="10" y="10" width="120" height="70" stroke="var(--teal)" stroke-width="1" fill="none"
+                        class="sketch-line" />
+                    <path d="M70 90 L 70 110 M 50 110 L 90 110" class="sketch-line" stroke-width="2" />
+                </g>
+            </g>
+
+            <!-- Chair -->
+            <g transform="translate(850, 480)">
+                <path d="M0 10 L 100 0 L 110 100 L 20 120 Z" class="sketch-line" fill="white" />
+                <path d="M20 120 L 20 220" class="sketch-line" />
+                <path d="M110 100 L 110 200" class="sketch-line" />
+            </g>
+
+            <!-- FILING CABINET (LEFT - HERO) -->
+            <g transform="translate(180, 320)">
+                <!-- 3D Perspective Box -->
+                <!-- Side Panel (Left) -->
+                <path d="M0 50 L 80 0 L 80 400 L 0 480 Z" class="sketch-line" fill="#f0f2f5" />
+                <!-- Front Face -->
+                <rect x="80" y="0" width="260" height="400" class="sketch-line-thick" fill="white" />
+
+                <!-- Drawer 1 (Syllabus) -->
+                <g class="drawer-group" data-id="1">
+                    <rect x="95" y="15" width="230" height="80" class="drawer-face sketch-line" fill="white" />
+                    <!-- Handle -->
+                    <rect x="180" y="45" width="60" height="15" class="drawer-handle" rx="2" />
+                    <!-- Button: Aligned and clearly "OPEN" -->
+                    <g class="open-btn-group" transform="translate(260, 43)">
+                        <rect x="0" y="0" width="50" height="20" class="open-btn-bg" rx="4" />
+                        <text x="25" y="14" class="open-btn-text">OPEN</text>
+                    </g>
+                </g>
+
+                <!-- Drawer 2 (Resources) -->
+                <g class="drawer-group" data-id="2">
+                    <rect x="95" y="110" width="230" height="80" class="drawer-face sketch-line" fill="white" />
+                    <rect x="180" y="140" width="60" height="15" class="drawer-handle" rx="2" />
+                    <g class="open-btn-group" transform="translate(260, 138)">
+                        <rect x="0" y="0" width="50" height="20" class="open-btn-bg" rx="4" />
+                        <text x="25" y="14" class="open-btn-text">OPEN</text>
+                    </g>
+                </g>
+
+                <!-- Drawer 3 (Archives) -->
+                <g class="drawer-group" data-id="3">
+                    <rect x="95" y="205" width="230" height="80" class="drawer-face sketch-line" fill="white" />
+                    <rect x="180" y="235" width="60" height="15" class="drawer-handle" rx="2" />
+                    <g class="open-btn-group" transform="translate(260, 233)">
+                        <rect x="0" y="0" width="50" height="20" class="open-btn-bg" rx="4" />
+                        <text x="25" y="14" class="open-btn-text">OPEN</text>
+                    </g>
+                </g>
+
+                <!-- Drawer 4 (Contacts) -->
+                <g class="drawer-group" data-id="4">
+                    <rect x="95" y="300" width="230" height="80" class="drawer-face sketch-line" fill="white" />
+                    <rect x="180" y="330" width="60" height="15" class="drawer-handle" rx="2" />
+                    <g class="open-btn-group" transform="translate(260, 328)">
+                        <rect x="0" y="0" width="50" height="20" class="open-btn-bg" rx="4" />
+                        <text x="25" y="14" class="open-btn-text">OPEN</text>
+                    </g>
+                </g>
+            </g>
+
+            <!-- Brand Badge / Info -->
+            <text x="50" y="850" class="sketch-line" font-family="Open Sans" font-size="10" stroke="none"
+                fill="var(--slate)" opacity="0.6"> OFFICE INTERACTIVE V3 </text>
+
+        </svg>
+
+        <!-- Slide-out Panel -->
+        <div id="reveal-panel">
+            <div class="panel-header">
+                <span class="panel-eyebrow">Interactive Record</span>
+                <h2 id="panel-title">Syllabus</h2>
+                <button class="close-btn" aria-label="Close">&times;</button>
+            </div>
+            <div id="panel-content" class="content-body">
+                Placeholder content...
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const drawerData = {
+            1: {
+                title: "Syllabus",
+                content: "This drawer contains the core learning objectives and the semester roadmap. Review the weekly breakdown to stay on track."
+            },
+            2: {
+                title: "Resources",
+                content: "Here you will find links to external reading, bibliographies, and templates. Everything you need to succeed in your assignments."
+            },
+            3: {
+                title: "Archives",
+                content: "Access past examination papers and historical project examples here. Use these as benchmarks for your own high-quality work."
+            },
+            4: {
+                title: "Contacts",
+                content: "Office hours, TA contact information, and department directory. We are here to help you succeed."
+            }
+        };
+
+        const panel = document.getElementById('reveal-panel');
+        const titleEl = document.getElementById('panel-title');
+        const contentEl = document.getElementById('panel-content');
+        const closeBtn = document.querySelector('.close-btn');
+
+        // Handle Drawer Clicks
+        document.querySelectorAll('.drawer-group').forEach(drawer => {
+            drawer.addEventListener('click', (e) => {
+                const id = drawer.getAttribute('data-id');
+                const data = drawerData[id];
+
+                if (data) {
+                    titleEl.textContent = data.title;
+                    contentEl.textContent = data.content;
+                    panel.classList.add('active');
+                }
+            });
+        });
+
+        // Close Panel
+        closeBtn.addEventListener('click', () => {
+            panel.classList.remove('active');
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!panel.contains(e.target) && !e.target.closest('.drawer-group')) {
+                panel.classList.remove('active');
+            }
+        });
+
+    </script>
+</body>
+
+</html>
